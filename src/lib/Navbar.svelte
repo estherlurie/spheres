@@ -5,15 +5,18 @@
 
 <style lang="scss">
   main {
-    background-color: rgb(92, 39, 81);
+    background-color: rgb(68, 94, 86);
     border: solid;
-    border-color: #4c061d;
+    border-color: black;
     border-radius: 10px;
+    height: 50px;
 
     display: flex;
   }
 
   a {
-    margin: 0 5%;
+    margin: 10px 25px;
+    font-size: 18px;
+    padding: 5px;
   }
 </style>
