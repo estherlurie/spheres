@@ -4,9 +4,9 @@
 
 <Navbar />
 <main>
-  <h1>Profile</h1>
+  <h1>Your name here.</h1>
   <p>
-    You can edit and update your profile. You can see your posts and manage your
-    Spheres.
+    Eventually, you will be able to edit/update your profile, see your posts,
+    and manage your Spheres.
   </p>
 </main>
