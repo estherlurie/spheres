@@ -3,10 +3,10 @@
 </script>
 
 <div class="outer">
-  <ClickableCard text="John" link="./people/John" />
-  <ClickableCard text="Jane" link="./people/Jane" />
-  <ClickableCard text="Eric" link="./people/Eric" />
-  <ClickableCard text="Trinity" link="./people/Trinity" />
+  <ClickableCard text="John" link="./people/john" />
+  <ClickableCard text="Jane" link="./people/jane" />
+  <ClickableCard text="Eric" link="./people/eric" />
+  <ClickableCard text="Trinity" link="./people/trinity" />
 </div>
 
 <style>
