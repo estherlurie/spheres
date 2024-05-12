@@ -12,7 +12,7 @@
 <style>
   .outer {
     display: flex;
-    width: 450px;
+    width: 90%;
     overflow-x: scroll;
   }
 </style>

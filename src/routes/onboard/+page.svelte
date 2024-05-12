@@ -9,6 +9,3 @@
   <h2>Here are some users. Are any of them in your social circle?</h2>
   <Grid />
 </main>
-
-<style>
-</style>
