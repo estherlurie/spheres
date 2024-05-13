@@ -1,6 +1,7 @@
 # spheres
 spherical social media
 
+
 # commands to know
 Get copy of environment variables for connecting to database on dev
 ```bash
@@ -18,3 +19,5 @@ Update typescript prisma client to use latest database
 ```bash
 npx prisma generate
 ```
+
+# [Vercel](https://vercel.com/estherluries-projects/spheres/deployments)
