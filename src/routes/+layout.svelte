@@ -11,6 +11,9 @@
     color: #bfc2c7;
 
     transition: background-color 0.3s;
+
+    scrollbar-color: lightblue rgb(24, 100, 114);
+    scrollbar-width: thin;
   }
 
   :global(a) {
