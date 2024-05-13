@@ -24,6 +24,8 @@
 
     border: solid rgb(6, 66, 11);
     border-radius: 10px;
+
+    overflow-y: auto;
   }
 
   header {
@@ -34,16 +36,16 @@
 
   p {
     display: flexbox;
-    margin: 30px auto;
+    margin: 30px 15px;
 
-    text-align: center;
+    text-align: left;
+    padding-left: 1%;
 
     font-size: 18px;
 
     white-space: nowrap;
     overflow: hidden;
     text-wrap: pretty;
-    text-overflow: clip;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 </style>

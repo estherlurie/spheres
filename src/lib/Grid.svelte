@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ClickableCard from "$lib/ClickableCard.svelte";
+  import ClickableCard from "$lib/components/ClickableCard.svelte";
 </script>
 
 <div class="outer">
@@ -13,6 +13,6 @@
   .outer {
     display: flex;
     width: 90%;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 </style>

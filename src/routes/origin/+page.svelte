@@ -10,7 +10,9 @@
 <Navbar />
 <main>
   <h1>Origin</h1>
-  <CreatePostForm />
+  <div>
+    <CreatePostForm />
+  </div>
   <div class="posts">
     {#each data.posts as post}
       <Post title={post.title} content={post.content} id={post.id} />
@@ -23,21 +25,15 @@
     display: block;
   }
 
-  article {
-    border: solid gray;
-    border-radius: 10px;
-
-    width: 200px;
-
-    overflow-x: scroll;
-    overflow-y: scroll;
-
-    text-wrap: wrap;
+  div {
+    margin: 5%;
   }
+
   .posts {
     display: flex;
     margin: 0 auto;
 
-    overflow-x: scroll;
+    overflow-x: auto;
+    overflow-y: auto;
   }
 </style>

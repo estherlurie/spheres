@@ -1,5 +1,6 @@
 <script>
-  import Card from "./Card.svelte";
+  import Card from "./components/Card.svelte";
+  import Button from "./components/Button.svelte";
 
   export let title;
   export let content;
@@ -10,9 +11,11 @@
   <article>
     <Card {title} {content} />
     <form action="?/deletePost&id={id}" method="POST">
-      <button type="submit">Delete Post</button>
+      <Button type="submit" text="Delete Post" />
     </form>
-    <a href="/" role="button" style="width: 100%;">Edit Post</a>
+    <div class="edit">
+      <a href="/" role="button">Edit Post</a>
+    </div>
   </article>
 </div>
 
@@ -30,11 +33,7 @@
     display: flex;
   }
 
-  button {
-    margin: 0 auto;
-  }
-
-  a {
-    margin: 0 auto;
+  .edit {
+    text-align: center;
   }
 </style>
