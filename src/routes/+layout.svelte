@@ -14,7 +14,7 @@
   }
 
   :global(a) {
-    color: rgb(146, 220, 229);
+    color: rgb(176, 220, 226);
     text-decoration: none;
 
     &:visited {

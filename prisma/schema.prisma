@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model passwords {
+  id       Int    @id @default(autoincrement())
+  user_id  Int
+  password String
+  users    users  @relation(fields: [user_id], references: [id])
+}
+
+model posts {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  text        String?
+  create_time DateTime? @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  users       users     @relation(fields: [user_id], references: [id])
+}
+
+model users {
+  id        Int         @id @default(autoincrement())
+  name      String?
+  passwords passwords[]
+  posts     posts[]
+}
+
+model spheres_posts {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+}
+
+model spheres_users {
+  id   Int    @id @default(autoincrement())
+  name String
+}

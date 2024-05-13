@@ -1,10 +1,14 @@
 <script lang="ts">
   /** @type {import('./types').PageData} */
-  export let text;
+  export let title;
+  export let content;
 </script>
 
 <div class="card">
-  <p>{text}</p>
+  {#if title}
+    <header>{title}</header>
+  {/if}
+  <p>{content}</p>
 </div>
 
 <style lang="scss">

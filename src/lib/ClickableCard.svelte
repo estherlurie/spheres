@@ -1,6 +1,7 @@
 <script lang="ts">
   /** @type {import('./types').PageData} */
-  export let text;
+  export let title;
+  export let content;
   export let link;
 
   import { navigating } from "$app/stores";
@@ -10,6 +11,6 @@
 
 <div>
   <a href="./{link}">
-    <Card {text} />
+    <Card {title} {content} />
   </a>
 </div>
