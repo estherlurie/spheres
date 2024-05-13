@@ -14,7 +14,7 @@
       <Button type="submit" text="Delete Post" />
     </form>
     <div class="edit">
-      <a href="/" role="button">Edit Post</a>
+      <a href="/{id}" role="button">Edit Post</a>
     </div>
   </article>
 </div>
