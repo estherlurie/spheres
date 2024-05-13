@@ -1,5 +1,6 @@
 <main>
   <a href="/">Home</a>
+  <a href="/origin">Origin</a>
   <a href="/profile">Profile</a>
 </main>
 

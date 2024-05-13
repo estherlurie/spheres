@@ -11,10 +11,13 @@
     color: #bfc2c7;
 
     transition: background-color 0.3s;
+
+    scrollbar-color: lightblue rgb(24, 100, 114);
+    scrollbar-width: thin;
   }
 
   :global(a) {
-    color: rgb(146, 220, 229);
+    color: rgb(176, 220, 226);
     text-decoration: none;
 
     &:visited {
