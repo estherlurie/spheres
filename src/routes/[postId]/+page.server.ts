@@ -1,5 +1,6 @@
+import { goto } from "$app/navigation";
 import { prisma } from "$lib/server/prisma";
-import { error, fail, type Actions } from "@sveltejs/kit";
+import { error, fail, redirect, type Actions } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ params }) => {
@@ -42,7 +43,5 @@ export const actions: Actions = {
       console.error(err);
       return fail(500, { message: "Could not update article" });
     }
-
-    return { status: 200 };
   },
 };
