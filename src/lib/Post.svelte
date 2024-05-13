@@ -6,10 +6,35 @@
   export let id;
 </script>
 
-<article>
-  <Card {title} {content} />
-  <form action="?/deletePost&id={id}" method="POST">
-    <button type="submit">Delete Post</button>
-  </form>
-  <a href="/" role="button" style="width: 100%;">Edit Post</a>
-</article>
+<div class="outer">
+  <article>
+    <Card {title} {content} />
+    <form action="?/deletePost&id={id}" method="POST">
+      <button type="submit">Delete Post</button>
+    </form>
+    <a href="/" role="button" style="width: 100%;">Edit Post</a>
+  </article>
+</div>
+
+<style>
+  .outer {
+    margin-left: 10px;
+    display: flex;
+  }
+
+  article {
+    margin: 0 auto;
+  }
+
+  form {
+    display: flex;
+  }
+
+  button {
+    margin: 0 auto;
+  }
+
+  a {
+    margin: 0 auto;
+  }
+</style>

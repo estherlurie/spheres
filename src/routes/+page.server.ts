@@ -21,10 +21,3 @@ export const actions: Actions = {
     return { status: 200 };
   },
 };
-
-/** @type {import('./$types').PageLoad} */
-export const load = async () => {
-  return {
-    posts: await prisma.spheres_posts.findMany(),
-  };
-};
