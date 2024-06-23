@@ -12,21 +12,21 @@ let getUserInformation = async (sessionid: String) => {
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
+	/*
 	console.log('handling event');
 
 	let logging_in = event.cookies.get('logging_in');
+	let sessionid = event.cookies.get('sessionid');
+
 	if (logging_in === 'true') {
 		console.log('logging in');
 
-		let authenticated = true;
+		let authenticated = false;
 		if (authenticated) {
 			event.cookies.set('logging_in', 'false', { path: '/' });
 			event.cookies.set('sessionid', 'abcd1234', { path: '/' });
 		}
-	}
-
-	let sessionid = event.cookies.get('sessionid');
-	if (!sessionid) {
+	} else if (!sessionid) {
 		console.log("no sessionid found");
 
 		event.cookies.set('logging_in', 'true', { path: '/' });
@@ -39,4 +39,7 @@ export async function handle({ event, resolve }) {
 		const response = await resolve(event);
 		return response;
 	}
+	*/
+	const response = await resolve(event);
+	return response;
 }

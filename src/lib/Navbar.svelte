@@ -2,6 +2,7 @@
   <a href="/">Home</a>
   <a href="/origin">Origin</a>
   <a href="/profile">Profile</a>
+  <a href="/login">Login</a>
 </main>
 
 <style lang="scss">

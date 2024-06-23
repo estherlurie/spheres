@@ -10,7 +10,7 @@ datasource db {
 
 model users {
   id        Int         @id @default(autoincrement())
-  name      String?
+  name      String?     @unique
   passwords passwords[]
   posts     posts[]
 }
@@ -32,7 +32,7 @@ model posts {
 
 model spheres_users {
   id       Int               @id @default(autoincrement())
-  name     String
+  name     String            @unique
   email    String
   password String
   posts    spheres_posts[]

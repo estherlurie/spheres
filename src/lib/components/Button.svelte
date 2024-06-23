@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
   export let type;
-  export let text;
+  export let text: String;
 </script>
 
 <button {type}>{text}</button>
