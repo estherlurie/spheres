@@ -3,26 +3,26 @@ import jwt from 'jsonwebtoken';
 class Session {
   username: string = "";
   createdAt: Date = new Date();
-  signedToken: string = "";
+
+  constructor(username: string) {
+    this.username = username;
+  }
 }
+
 
 const getSecret = () => {
   return process.env.JWT_SECRET;
 };
 
-const signToken = (token: string) => {
+const signSession = (session: Session) => {
   let secret = getSecret();
-  return jwt.sign(token, secret);
+  return jwt.sign(session, secret);
 }
 
-export function fetchSession(username: string, token: string): Session {
+export function fetchSession(username: string): Session {
   console.log("createSession for " + username);
-  let signedToken = signToken(token);
-  return {
-    username: username,
-    createdAt: new Date(),
-    signedToken: signedToken
-
-  };
+  let session = new Session(username);
+  let signedSession = signSession(session);
+  return signedSession;
 };
 
