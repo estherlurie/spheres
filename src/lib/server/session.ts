@@ -15,14 +15,19 @@ const getSecret = () => {
 };
 
 const signSession = (session: Session) => {
-  let secret = getSecret();
-  return jwt.sign(session, secret);
+  return jwt.sign(session, getSecret(), { expiresIn: "1d" });
 }
 
-export function fetchSession(username: string): Session {
+function fetchSession(username: string): Session {
   console.log("createSession for " + username);
   let session = new Session(username);
   let signedSession = signSession(session);
   return signedSession;
 };
 
+function validateSession(session: Session): Session {
+  console.log("validateSession for " + session.username);
+  return jwt.verify(session, getSecret());
+}
+
+export { Session, fetchSession, validateSession };
