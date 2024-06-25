@@ -1,16 +1,17 @@
 import type { Actions } from '@sveltejs/kit';
+import { encryptPassword } from '$lib/server/encrypt';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 
 const INVALID_EMAIL = "email has invalid syntax";
-const COOKIE_AUTH = 'authenticated';
 
 export const actions: Actions = {
 	signUp: async ({ cookies, request }) => {
-		cookies.set(COOKIE_AUTH, 'false', { path: '/' });
 		console.log("sign up action");
-		if (cookies.get(COOKIE_AUTH) === 'true') {
-			console.log("auth set");
+		let session = cookies.get("session");
+		if (session) {
+			console.log("session set");
+			console.log(session);
 			redirect(302, '/');
 		}
 
@@ -61,23 +62,23 @@ export const actions: Actions = {
 		}
 		console.log("Username is available! Have at it");
 
-		let user = {
-			data: {
-				name: username,
-				email: email,
-				password: password
+		await encryptPassword(username, password, async (hash) => {
+			let user = {
+				data: {
+					name: username,
+					email: email,
+					password: hash
+				}
+			};
+			let res = await prisma.spheres_users.create(user);
+			if (!res) {
+				console.log("No res");
+				return { success: false, message: "Unable to create user" };
 			}
-		};
-		let res = await prisma.spheres_users.create(user);
-		if (!res) {
-			console.log("No res");
-		}
-		const defaultPath = {
-			path:
-				'/'
-		};
-		cookies.set(COOKIE_AUTH, 'true', defaultPath);
-		cookies.set("username", username, defaultPath);
-		redirect(302, '/');
+		});
+
+		console.log("User created, redirecting to success");
+		redirect(302, '/login/signup/success/' + username);
+
 	}
 }

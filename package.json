@@ -42,6 +42,7 @@
     "@prisma/client": "^5.13.0",
     "@types/bcrypt": "^5.0.2",
     "@vercel/postgres": "^0.8.0",
+    "jsonwebtoken": "^9.0.2",
     "sass": "^1.77.1",
     "vercel": "^32.3.0"
   }

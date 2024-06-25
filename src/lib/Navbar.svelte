@@ -1,8 +1,15 @@
+<script lang="ts">
+  export let username: string | null;
+</script>
+
 <main>
   <a href="/">Home</a>
   <a href="/origin">Origin</a>
   <a href="/profile">Profile</a>
-  <a href="/login">Login</a>
+  <a href="/logout">Logout</a>
+  {#if username}
+    <p>Hello {username}</p>
+  {/if}
 </main>
 
 <style lang="scss">

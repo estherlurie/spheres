@@ -1,6 +1,6 @@
 import type { Actions } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
-import bcrypt from 'bcrypt';
+import { encryptPassword } from '$lib/server/encrypt';
 import { redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
@@ -12,11 +12,7 @@ export const actions: Actions = {
 			password: string;
 		};
 		console.log("Attempt sign in for user: " + username);
-		let passwordHash = bcrypt.hash(password, 10, async (err, hash) => {
-			if (err) {
-				console.log(err);
-				return { error: err };
-			}
+		await encryptPassword(username, password, async (passwordHash) => {
 			let user = await prisma.spheres_users.findFirst({
 				where: {
 					name: username,
@@ -24,9 +20,8 @@ export const actions: Actions = {
 				}
 			});
 			if (user) {
-				console.log("User exists");
-				cookies.set('authenticated', 'true', { path: '/' });
-				return { success: true };
+				console.log("Logging in");
+				redirect(302, 'login/signin/success');
 			} else {
 				console.log("Incorrect username or password");
 				return {

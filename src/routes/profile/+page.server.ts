@@ -4,6 +4,7 @@ import { fail } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ cookies }) => {
+
   return {
     username: await cookies.get('username'),
     posts: await prisma.spheres_users.findMany(),
