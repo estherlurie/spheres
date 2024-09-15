@@ -12,7 +12,7 @@ export const actions: Actions = {
 			password: string;
 		};
 		console.log("Attempt sign in for user: " + username);
-		await encryptPassword(username, password, async (passwordHash) => {
+		await encryptPassword(username, password, async (passwordHash: string) => {
 			let user = await prisma.spheres_users.findFirst({
 				where: {
 					name: username,
