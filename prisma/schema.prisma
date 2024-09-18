@@ -68,8 +68,6 @@ model User {
 model Session {
   id         String   @id @default(uuid())
   user_id    String
-  token      String   @unique
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
   user       User     @relation(fields: [user_id], references: [id])
 }
