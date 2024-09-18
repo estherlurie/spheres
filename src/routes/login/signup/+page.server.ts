@@ -1,84 +1,124 @@
-import type { Actions } from '@sveltejs/kit';
-import { encryptPassword } from '$lib/server/encrypt';
-import { prisma } from '$lib/server/prisma';
-import { redirect } from '@sveltejs/kit';
+import type { Actions, Cookies } from "@sveltejs/kit";
+import { encryptPassword } from "$lib/server/encrypt";
+import { prisma } from "$lib/server/prisma";
+import { redirect } from "@sveltejs/kit";
+import { type Session, validateSession } from "$lib/server/session";
 
 const INVALID_EMAIL = "email has invalid syntax";
+const LOG_PREFIX = "/login/signup: ";
+
+function log(message: string) {
+  console.log(LOG_PREFIX + message);
+}
+
+function checkForActiveSession(cookies: Cookies): boolean {
+  let sessionId = cookies.get("sessionId");
+  if (!sessionId) {
+    return false;
+  }
+  log("Got sessionId");
+  return validateSession(sessionId);
+}
+
+function validateSignUpForm(
+  username: string | undefined,
+  email: string | undefined,
+  password: string | undefined
+): string {
+  if (!username) {
+    return "No username";
+  }
+  if (!email) {
+    return "No email";
+  }
+  if (!password) {
+    return "No password";
+  }
+  if (!email.includes("@")) {
+    return "Invalid email";
+  }
+  return "";
+}
+
+/** @type {import('./$types').PageServerLoad} */
+export const load = async ({ cookies }) => {
+  log("Loading");
+  let validSessionExists = checkForActiveSession(cookies);
+  if (validSessionExists) {
+    log("valid session");
+    redirect(302, "/");
+  }
+};
+
+async function usernameOrEmailClaimed(
+  username: string,
+  email: string
+): Promise<string> {
+  let record = await prisma.spheres_users.findFirst({
+    select: {
+      name: true,
+      email: true,
+    },
+    where: {
+      OR: [
+        {
+          name: username,
+        },
+        { email: email },
+      ],
+    },
+  });
+  log(
+    "Checking existance of account with username=" +
+      username +
+      ", email=" +
+      email
+  );
+  if (record) {
+    if (record.name) {
+      return "Username already claimed";
+    } else {
+      return "Email already claimed";
+    }
+  }
+  return "";
+}
 
 export const actions: Actions = {
-	signUp: async ({ cookies, request }) => {
-		console.log("sign up action");
-		let session = cookies.get("session");
-		if (session) {
-			console.log("session set");
-			console.log(session);
-			redirect(302, '/');
-		}
+  signUp: async ({ cookies, request }) => {
+    let formData = await request.formData();
+    const { username, email, password } = Object.fromEntries(formData) as {
+      username: string;
+      email: string;
+      password: string;
+    };
 
-		let formData = await request.formData();
-		const { username,
-			email,
-			password } = Object.fromEntries(formData) as {
-				username: string;
-				email: string;
-				password: string;
-			};
-		if (!username) {
-			const error = "ERROR: No username";
-			console.log(error);
-			return { status: 500, message: error };
-		}
-		if (!email) {
-			const error = "ERROR: No email";
-			console.log(error);
-			return { status: 500, message: error };
-		}
-		if (!password) {
-			const error = "ERROR: No password";
-			console.log(error);
-			return { status: 500, message: error };
-		}
-		console.log("Attempt sign up for user: " + username);
-		if (!email.includes('@')) {
-			const email_str = INVALID_EMAIL + ": " + email;
-			console.log(email_str);
-			return {
-				status: 500, message: email_str
-			};
-		}
+    let error = validateSignUpForm(username, email, password);
+    if (error !== "") {
+      log(error);
+      return { status: 500, message: error };
+    }
 
-		let exists = await prisma.spheres_users.findUnique({
-			select: {
-				name: true
-			},
-			where: {
-				name: username
-			}
-		});
-		console.log("checking existance of " + username);
-		if (exists) {
-			console.log("Username exists: " + exists);
-			return { success: false, message: "Username already claimed" };
-		}
-		console.log("Username is available! Have at it");
+    error = await usernameOrEmailClaimed(username, email);
+    if (error !== "") {
+      log(error);
+      return { status: 500, message: error };
+    }
 
-		await encryptPassword(username, password, async (hash) => {
-			let user = {
-				data: {
-					name: username,
-					email: email,
-					password: hash
-				}
-			};
-			let res = await prisma.spheres_users.create(user);
-			if (!res) {
-				console.log("No res");
-				return { success: false, message: "Unable to create user" };
-			}
-		});
+    let addUserToDatabase = async (hashedPassword: string) => {
+      let user = {
+        data: {
+          name: username,
+          email: email,
+          password: hashedPassword,
+        },
+      };
+      await prisma.spheres_users.create(user);
+    };
 
-		console.log("User created, redirecting to success");
-		redirect(302, '/login/signup/success/' + username);
+    await encryptPassword(username, password, addUserToDatabase);
 
-	}
-}
+    log("User " + username + " created, redirecting to success");
+    redirect(302, "/login/success/" + username);
+  },
+};
