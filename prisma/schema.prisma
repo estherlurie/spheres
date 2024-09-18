@@ -33,7 +33,7 @@ model posts {
 model spheres_users {
   id       Int               @id @default(autoincrement())
   name     String            @unique
-  email    String
+  email    String            @unique
   password String
   posts    spheres_posts[]
   spheres  spheres_spheres[]
