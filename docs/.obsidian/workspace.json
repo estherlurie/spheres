@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Session Management.md",
+                "file": "Home.md",
                 "mode": "source",
                 "source": false
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Session Management.md",
+                "file": "Home.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Session Management.md",
+                "file": "Home.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Session Management.md"
+                "file": "Home.md"
               }
             }
           }
@@ -163,8 +163,8 @@
   "lastOpenFiles": [
     "Tracking.md",
     "Session Management.md",
-    "Sign In.md",
+    "Home.md",
     "Sign Up.md",
-    "Home.md"
+    "Sign In.md"
   ]
 }
