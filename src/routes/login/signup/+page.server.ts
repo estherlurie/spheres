@@ -118,7 +118,20 @@ export const actions: Actions = {
 
     await encryptPassword(username, password, addUserToDatabase);
 
+    await new Promise((f) => setTimeout(f, 250)); // wait for db write
+    let res = await prisma.spheres_users.findUnique({
+      select: { id: true },
+      where: {
+        name: username,
+      },
+    });
+    if (!res) {
+      let error = "Could not find user " + username + " after creation!";
+      log(error);
+      return { status: 500, message: error };
+    }
+
     log("User " + username + " created, redirecting to success");
-    redirect(302, "/login/success/" + username);
+    redirect(302, "/login/success/" + res.id);
   },
 };
