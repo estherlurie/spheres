@@ -28,7 +28,10 @@ export async function handle({ event, resolve }) {
   const log = (message: string) => {
     console.log("handle: " + message);
   };
-  event.locals.username = await getUsername(event.cookies.get("sessionId"));
+  let sessionId = event.cookies.get("sessionId");
+  if (sessionId) {
+    event.locals.username = await getUsername(sessionId);
+  }
   const response = await resolve(event);
   return response;
 }
