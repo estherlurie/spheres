@@ -1,33 +1,23 @@
-import jwt from 'jsonwebtoken';
+import { prisma } from "./prisma";
 
-class Session {
-  username: string = "";
-  createdAt: Date = new Date();
+function log(message: string) {
+  console.log("Session: " + message);
+}
 
-  constructor(username: string) {
-    this.username = username;
+async function validateSession(sessionId: string): Promise<boolean> {
+  log("validateSession called");
+  let session = await prisma.spheres_session.findUnique({
+    where: {
+      id: sessionId,
+    },
+  });
+  if (session) {
+    let user = await prisma.spheres_users.findUnique({
+      where: { id: session.spheres_usersId },
+    });
+    return true;
   }
+  return false;
 }
 
-
-const getSecret = () => {
-  return process.env.JWT_SECRET;
-};
-
-const signSession = (session: Session) => {
-  return jwt.sign(session, getSecret(), { expiresIn: "1d" });
-}
-
-function fetchSession(username: string): Session {
-  console.log("createSession for " + username);
-  let session = new Session(username);
-  let signedSession = signSession(session);
-  return signedSession;
-};
-
-function validateSession(session: Session): Session {
-  console.log("validateSession for " + session.username);
-  return jwt.verify(session, getSecret());
-}
-
-export { Session, fetchSession, validateSession };
+export { validateSession };
