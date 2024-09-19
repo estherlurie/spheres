@@ -11,7 +11,7 @@
       <label for="username">Username</label>
       <input class="formEntry" type="text" id="username" name="username" />
       <label for="email">email</label>
-      <input class="formEntry" type="text" id="email" name="email" />
+      <input class="formEntry" type="email" id="email" name="email" />
       <label for="password">Password</label>
       <input class="formEntry" type="password" id="password" name="password" />
       <Button type="submit" text="Submit" />
@@ -33,8 +33,10 @@
   .formEntry {
     color: inherit;
     background-color: inherit;
-    width: 95%;
+
     border: solid gray;
     border-radius: 10px;
+
+    width: 95%;
   }
 </style>
