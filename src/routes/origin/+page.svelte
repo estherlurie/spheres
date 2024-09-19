@@ -5,9 +5,10 @@
   import type { PageData } from "./$types";
   import Post from "$lib/Post.svelte";
   export let data: PageData;
+  let username = data.username;
 </script>
 
-<Navbar />
+<Navbar {username} />
 <main>
   <h1>Origin</h1>
   <div>
