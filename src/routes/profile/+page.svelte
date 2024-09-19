@@ -1,12 +1,13 @@
 <script lang="ts">
   import Navbar from "$lib/Navbar.svelte";
 
-  let name = "Testi";
+  export let data;
+  let username = data.username;
 </script>
 
-<Navbar />
+<Navbar {username} />
 <main>
-  <h1>{name}</h1>
+  <h1>{username}</h1>
   <p>
     Eventually, you will be able to edit/update your profile, see your posts,
     and manage your Spheres.
