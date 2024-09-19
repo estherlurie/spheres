@@ -8,11 +8,9 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-// THE VOID
-
 model users {
   id        Int         @id @default(autoincrement())
-  name      String?
+  name      String?     @unique
   passwords passwords[]
   posts     posts[]
 }
@@ -32,33 +30,37 @@ model posts {
   users       users     @relation(fields: [user_id], references: [id])
 }
 
-// SPHERES
-
 model spheres_users {
-  id      Int               @id @default(autoincrement())
-  name    String
-  posts   spheres_posts[]
-  spheres spheres_spheres[]
+  id       Int               @id @default(autoincrement())
+  name     String            @unique
+  email    String            @unique
+  password String
+  posts    spheres_posts[]
+  spheres  spheres_spheres[]
+  session spheres_session[]
 }
 
 model spheres_spheres {
-  id    Int             @id @default(autoincrement())
-  posts spheres_posts[]
-
-  spheres_users   spheres_users? @relation(fields: [spheres_usersId], references: [id])
+  id              Int             @id @default(autoincrement())
   spheres_usersId Int
+  posts           spheres_posts[]
+  spheres_users   spheres_users   @relation(fields: [spheres_usersId], references: [id])
 }
 
 model spheres_posts {
-  id          Int       @id @default(autoincrement())
-  create_time DateTime? @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
-
-  title   String
-  content String
-
-  spheres   spheres_spheres @relation(fields: [sphere_id], references: [id])
-  sphere_id Int
-
-  spheres_users   spheres_users? @relation(fields: [spheres_usersId], references: [id])
+  id              Int             @id @default(autoincrement())
+  create_time     DateTime?       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  title           String
+  content         String
+  sphere_id       Int
   spheres_usersId Int
+  spheres         spheres_spheres @relation(fields: [sphere_id], references: [id])
+  spheres_users   spheres_users   @relation(fields: [spheres_usersId], references: [id])
+}
+
+model spheres_session {
+  id         String   @id @default(uuid())
+  spheres_usersId     Int 
+  created_at DateTime @default(now())
+  spheres_users       spheres_users @relation(fields: [spheres_usersId], references: [id])
 }

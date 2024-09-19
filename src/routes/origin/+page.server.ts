@@ -3,9 +3,19 @@ import { prisma } from "$lib/server/prisma";
 import { fail } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
-export const load = async () => {
+export const load = async ({ locals }) => {
   return {
-    posts: await prisma.spheres_posts.findMany(),
+    username: locals.username,
+    posts: await prisma.spheres_users
+      .findUniqueOrThrow({
+        select: { id: true },
+        where: { name: locals.username },
+      })
+      .then(async ({ id }) => {
+        return await prisma.spheres_posts.findMany({
+          where: { spheres_usersId: id },
+        });
+      }),
   };
 };
 
