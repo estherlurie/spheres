@@ -4,7 +4,7 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
-  const username = data.success ? data.username : null;
+  const username = data.username;
 </script>
 
 <Navbar {username} />
