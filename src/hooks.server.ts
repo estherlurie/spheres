@@ -1,45 +1,34 @@
-import { prisma } from '$lib/server/prisma';
-import { redirect } from '@sveltejs/kit';
+import { prisma } from "$lib/server/prisma";
+import { redirect } from "@sveltejs/kit";
 
-let getUserInformation = async (sessionid: String) => {
-	console.log("getUserInformation called with sessionid:");
-	console.log(sessionid)
-	let x = await prisma.spheres_users.findFirst();
-	console.log(x);
-
-	return { name: 'Testi' };
-};
+async function getUsername(sessionid: string): Promise<string> {
+  if (!sessionid) {
+    return "";
+  }
+  return await prisma.spheres_session
+    .findUniqueOrThrow({
+      where: { id: sessionid },
+    })
+    .then(async (session) => {
+      return await prisma.spheres_users.findUniqueOrThrow({
+        where: { id: session.spheres_usersId },
+      });
+    })
+    .then((user) => {
+      return user.name;
+    })
+    .catch((err) => {
+      console.log("Error getting username during handle: " + err);
+      return "";
+    });
+}
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
-	/*
-	console.log('handling event');
-
-	let logging_in = event.cookies.get('logging_in');
-	let sessionid = event.cookies.get('sessionid');
-
-	if (logging_in === 'true') {
-		console.log('logging in');
-
-		let authenticated = false;
-		if (authenticated) {
-			event.cookies.set('logging_in', 'false', { path: '/' });
-			event.cookies.set('sessionid', 'abcd1234', { path: '/' });
-		}
-	} else if (!sessionid) {
-		console.log("no sessionid found");
-
-		event.cookies.set('logging_in', 'true', { path: '/' });
-		console.log("set logging_in cookie");
-
-		redirect(307, 'login');
-	} else {
-		event.locals.user = await getUserInformation(sessionid);
-		console.log(event.locals.user);
-		const response = await resolve(event);
-		return response;
-	}
-	*/
-	const response = await resolve(event);
-	return response;
+  const log = (message: string) => {
+    console.log("handle: " + message);
+  };
+  event.locals.username = await getUsername(event.cookies.get("sessionId"));
+  const response = await resolve(event);
+  return response;
 }
