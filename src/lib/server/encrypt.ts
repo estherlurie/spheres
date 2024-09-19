@@ -5,7 +5,7 @@ type CallbackFunction = (hashedPassword: string) => Promise<void>;
 const encryptPassword = async (
   username: string,
   password: string,
-  callback: CallbackFunction
+  callback: CallbackFunction,
 ): Promise<void> => {
   return await bcrypt.hash(password, 10, async (err, hash) => {
     if (err) {
