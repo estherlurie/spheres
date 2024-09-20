@@ -4,18 +4,17 @@ import { fail } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ locals }) => {
+  let user = await prisma.user.findUniqueOrThrow({
+    where: { name: locals.username },
+  });
+  if (!user) {
+    return { username: locals.username };
+  }
+
   return {
     username: locals.username,
-    posts: await prisma.user
-      .findUniqueOrThrow({
-        select: { id: true },
-        where: { name: locals.username },
-      })
-      .then(async ({ id }) => {
-        return await prisma.post.findMany({
-          where: { userId: id },
-        });
-      }),
+    spheres: await prisma.sphere.findMany({ where: { userId: user.id } }),
+    posts: await prisma.post.findMany({ where: { userId: user.id } }),
   };
 };
 
@@ -23,10 +22,12 @@ export const actions: Actions = {
   createPost: async ({ request, locals }) => {
     console.log("createPost called");
     const formData = await request.formData();
-    const { title, content } = Object.fromEntries(formData) as {
+    const { sphere, title, content } = Object.fromEntries(formData) as {
+      sphere: string;
       title: string;
       content: string;
     };
+    console.log("sphereId:" + sphere);
 
     return await prisma.user
       .findUniqueOrThrow({
@@ -34,7 +35,7 @@ export const actions: Actions = {
       })
       .then(async (user) => {
         return await prisma.post.create({
-          data: { title, content, userId: user.id, sphereId: 1 },
+          data: { title, content, userId: user.id, sphereId: Number(sphere) },
         });
       })
       .then(() => {
@@ -44,6 +45,23 @@ export const actions: Actions = {
         let message = "Error creating post: " + err;
         console.error(message);
         return { status: 500, message };
+      });
+  },
+
+  createSphere: async ({ request, locals }) => {
+    console.log("createSphere called");
+    const formData = await request.formData();
+    const { name, allowList } = Object.fromEntries(formData) as {
+      name: string;
+      allowList: string;
+    };
+
+    return await prisma.user
+      .findUniqueOrThrow({ where: { name: locals.username } })
+      .then(async (user) => {
+        return await prisma.sphere.create({
+          data: { name: name, userId: user.id },
+        });
       });
   },
 
