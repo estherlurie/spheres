@@ -1,17 +1,16 @@
 import { prisma } from "$lib/server/prisma";
-import { redirect } from "@sveltejs/kit";
 
 async function getUsername(sessionid: string): Promise<string> {
   if (!sessionid) {
     return "";
   }
-  return await prisma.spheres_session
+  return await prisma.session
     .findUniqueOrThrow({
       where: { id: sessionid },
     })
     .then(async (session) => {
-      return await prisma.spheres_users.findUniqueOrThrow({
-        where: { id: session.spheres_usersId },
+      return await prisma.user.findUniqueOrThrow({
+        where: { id: session.userId },
       });
     })
     .then((user) => {

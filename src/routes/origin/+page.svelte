@@ -4,20 +4,38 @@
 
   import type { PageData } from "./$types";
   import Post from "$lib/Post.svelte";
+  import CreateSphereForm from "$lib/CreateSphereForm.svelte";
   export let data: PageData;
   let username = data.username;
+  let spheres = data.spheres ? data.spheres : [];
+  let posts = data.posts ? data.posts : [];
+  let spheresExists = spheres.length !== 0;
+  let postsExists = posts.length !== 0;
 </script>
 
 <Navbar {username} />
 <main>
   <h1>Origin</h1>
   <div>
-    <CreatePostForm />
+    {#if !spheresExists}
+      <h2>Make your first Sphere!</h2>
+    {/if}
+    <CreateSphereForm />
+    {#each spheres as sphere}
+      <p>Sphere id={sphere.id} name={sphere.name}</p>
+    {/each}
+  </div>
+  <div>
+    {#if spheresExists}
+      <CreatePostForm {spheres} />
+    {/if}
   </div>
   <div class="posts">
-    {#each data.posts as post}
-      <Post title={post.title} content={post.content} id={post.id} />
-    {/each}
+    {#if postsExists}
+      {#each posts as post}
+        <Post title={post.title} content={post.content} id={post.id} />
+      {/each}
+    {/if}
   </div>
 </main>
 

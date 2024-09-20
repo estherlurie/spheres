@@ -8,59 +8,40 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model users {
-  id        Int         @id @default(autoincrement())
-  name      String?     @unique
-  passwords passwords[]
-  posts     posts[]
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  email          String   @unique
+  password       String
+  session        Session?
+  ownedSpheres   Sphere[] @relation("owner")
+  allowedSpheres Sphere[] @relation("allowed")
+  posts          Post[]   @relation("owner")
 }
 
-model passwords {
-  id       Int    @id @default(autoincrement())
-  user_id  Int
-  password String
-  users    users  @relation(fields: [user_id], references: [id])
+model Sphere {
+  id      Int    @id @default(autoincrement())
+  name    String
+  userId  Int
+  owner   User   @relation("owner", fields: [userId], references: [id])
+  allowed User[] @relation("allowed")
+  posts   Post[]
 }
 
-model posts {
-  id          Int       @id @default(autoincrement())
-  user_id     Int
-  text        String?
-  create_time DateTime? @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
-  users       users     @relation(fields: [user_id], references: [id])
+model Post {
+  id         Int       @id @default(autoincrement())
+  createTime DateTime? @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
+  title      String
+  content    String
+  userId   Int
+  user     User   @relation("owner", fields: [userId], references: [id])
+  sphereId Int
+  spheres  Sphere @relation(fields: [sphereId], references: [id])
 }
 
-model spheres_users {
-  id       Int               @id @default(autoincrement())
-  name     String            @unique
-  email    String            @unique
-  password String
-  posts    spheres_posts[]
-  spheres  spheres_spheres[]
-  session  spheres_session?
-}
-
-model spheres_spheres {
-  id              Int             @id @default(autoincrement())
-  spheres_usersId Int
-  posts           spheres_posts[]
-  spheres_users   spheres_users   @relation(fields: [spheres_usersId], references: [id])
-}
-
-model spheres_posts {
-  id              Int             @id @default(autoincrement())
-  create_time     DateTime?       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
-  title           String
-  content         String
-  sphere_id       Int
-  spheres_usersId Int
-  spheres         spheres_spheres @relation(fields: [sphere_id], references: [id])
-  spheres_users   spheres_users   @relation(fields: [spheres_usersId], references: [id])
-}
-
-model spheres_session {
-  id                  String   @id @default(uuid())
-  spheres_usersId     Int      @unique
-  created_at          DateTime @default(now())
-  spheres_users       spheres_users @relation(fields: [spheres_usersId], references: [id])
+model Session {
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  userId Int      @unique
+  user User     @relation(fields: [userId], references: [id])
 }

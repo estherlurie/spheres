@@ -1,9 +1,18 @@
-<script>
+<script lang="ts">
+  import type { Sphere } from "@prisma/client";
   import Button from "./components/Button.svelte";
+
+  export let spheres: Sphere[];
 </script>
 
 <form action="?/createPost" method="POST">
   <h2>What do you want to say?</h2>
+  <label for="sphere">Sphere</label>
+  <select id="sphere" name="sphere">
+    {#each spheres as sphere}
+      <option value={sphere.id}>{sphere.name}</option>
+    {/each}
+  </select>
   <label for="title"><h3>Title</h3></label>
   <input class="formEntry" type="text" id="title" name="title" />
   <label for="content"><h3>Content</h3></label>

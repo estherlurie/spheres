@@ -4,7 +4,7 @@ import { error, fail, type Actions } from "@sveltejs/kit";
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ params }) => {
   const getPost = async () => {
-    const post = await prisma.spheres_posts.findUnique({
+    const post = await prisma.post.findUnique({
       where: {
         id: Number(params.postId),
       },
@@ -27,15 +27,15 @@ export const actions: Actions = {
     };
 
     try {
-      await prisma.spheres_posts.update({
+      await prisma.post.update({
         where: {
           id: Number(params.postId),
         },
         data: {
           title,
           content,
-          sphere_id: 1,
-          spheres_usersId: 1,
+          sphereId: 1,
+          userId: 1,
         },
       });
     } catch (err) {
