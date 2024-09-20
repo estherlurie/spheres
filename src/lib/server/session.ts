@@ -6,15 +6,15 @@ function log(message: string) {
 
 async function validateSession(sessionId: string): Promise<boolean> {
   log("validateSession called");
-  return await prisma.spheres_session
+  return await prisma.session
     .findUniqueOrThrow({
       where: {
         id: sessionId,
       },
     })
     .then(async (session) => {
-      return await prisma.spheres_users.findUniqueOrThrow({
-        where: { id: session.spheres_usersId },
+      return await prisma.user.findUniqueOrThrow({
+        where: { id: session.userId },
       });
     })
     .then(() => {

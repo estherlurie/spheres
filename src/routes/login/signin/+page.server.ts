@@ -18,7 +18,7 @@ export const actions: Actions = {
 
     log("Attempt sign in for user: " + username);
 
-    let user = await prisma.spheres_users.findFirst({
+    let user = await prisma.user.findFirst({
       select: {
         id: true,
         name: true,

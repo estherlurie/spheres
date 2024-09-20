@@ -8,10 +8,10 @@ function log(message: string) {
 export const load = async ({ params, cookies }) => {
   let session = {
     data: {
-      spheres_usersId: Number(params.userId),
+      userId: Number(params.userId),
     },
   };
-  const res = await prisma.spheres_session.create(session);
+  const res = await prisma.session.create(session);
   if (res) {
     cookies.set("sessionId", res.id, { path: "/" });
   }

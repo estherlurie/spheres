@@ -6,21 +6,21 @@ import { fail } from "@sveltejs/kit";
 export const load = async ({ locals }) => {
   return {
     username: locals.username,
-    posts: await prisma.spheres_users
+    posts: await prisma.user
       .findUniqueOrThrow({
         select: { id: true },
         where: { name: locals.username },
       })
       .then(async ({ id }) => {
-        return await prisma.spheres_posts.findMany({
-          where: { spheres_usersId: id },
+        return await prisma.post.findMany({
+          where: { userId: id },
         });
       }),
   };
 };
 
 export const actions: Actions = {
-  createPost: async ({ request }) => {
+  createPost: async ({ request, locals }) => {
     console.log("createPost called");
     const formData = await request.formData();
     const { title, content } = Object.fromEntries(formData) as {
@@ -28,16 +28,23 @@ export const actions: Actions = {
       content: string;
     };
 
-    try {
-      await prisma.spheres_posts.create({
-        data: { title, content, sphere_id: 1, spheres_usersId: 1 },
+    return await prisma.user
+      .findUniqueOrThrow({
+        where: { name: locals.username },
+      })
+      .then(async (user) => {
+        return await prisma.post.create({
+          data: { title, content, userId: user.id, sphereId: 1 },
+        });
+      })
+      .then(() => {
+        return { status: 201 };
+      })
+      .catch((err) => {
+        let message = "Error creating post: " + err;
+        console.error(message);
+        return { status: 500, message };
       });
-    } catch (err) {
-      console.error(err);
-      return fail(500, { message: "Could not create post." });
-    }
-
-    return { status: 201 };
   },
 
   deletePost: async ({ url }) => {
@@ -47,7 +54,7 @@ export const actions: Actions = {
       return fail(500, { message: "invalid request" });
     }
     try {
-      await prisma.spheres_posts.delete({ where: { id: Number(id) } });
+      await prisma.post.delete({ where: { id: Number(id) } });
     } catch (err) {
       console.error(err);
       return fail(500, {

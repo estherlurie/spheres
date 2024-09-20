@@ -27,8 +27,8 @@ export const actions: Actions = {
     };
 
     try {
-      await prisma.spheres_posts.create({
-        data: { title, content, sphere_id: 1, spheres_usersId: 1 },
+      await prisma.post.create({
+        data: { title, content, sphereId: 1, userId: 1 },
       });
     } catch (err) {
       console.error(err);

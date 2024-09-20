@@ -23,7 +23,7 @@ async function checkForActiveSession(cookies: Cookies): Promise<boolean> {
 function validateSignUpForm(
   username: string | undefined,
   email: string | undefined,
-  password: string | undefined,
+  password: string | undefined
 ): string {
   if (!username) {
     return "No username";
@@ -52,36 +52,39 @@ export const load = async ({ cookies }) => {
 
 async function usernameOrEmailClaimed(
   username: string,
-  email: string,
+  email: string
 ): Promise<string> {
-  let record = await prisma.spheres_users.findFirst({
-    select: {
-      name: true,
-      email: true,
-    },
-    where: {
-      OR: [
-        {
-          name: username,
-        },
-        { email: email },
-      ],
-    },
-  });
   log(
     "Checking existance of account with username=" +
       username +
       ", email=" +
-      email,
+      email
   );
-  if (record) {
-    if (record.name) {
-      return "Username already claimed";
-    } else {
-      return "Email already claimed";
-    }
-  }
-  return "";
+  return await prisma.user
+    .findFirstOrThrow({
+      select: {
+        name: true,
+        email: true,
+      },
+      where: {
+        OR: [
+          {
+            name: username,
+          },
+          { email: email },
+        ],
+      },
+    })
+    .then((user) => {
+      if (user.name === username) {
+        return "Username already claimed";
+      } else {
+        return "Email already claimed";
+      }
+    })
+    .catch(() => {
+      return "";
+    });
 }
 
 export const actions: Actions = {
@@ -113,13 +116,13 @@ export const actions: Actions = {
           password: hashedPassword,
         },
       };
-      await prisma.spheres_users.create(user);
+      await prisma.user.create(user);
     };
 
     await encryptPassword(username, password, addUserToDatabase);
 
     await new Promise((f) => setTimeout(f, 250)); // wait for db write
-    let res = await prisma.spheres_users.findUnique({
+    let res = await prisma.user.findUnique({
       select: { id: true },
       where: {
         name: username,
