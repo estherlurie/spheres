@@ -41,7 +41,7 @@ model Post {
 
 model Session {
   id              String   @id @default(uuid())
-  spheres_usersId Int      @unique
   createdAt       DateTime @default(now())
-  spheres_users   User     @relation(fields: [spheres_usersId], references: [id])
+  userId Int      @unique
+  user User     @relation(fields: [userId], references: [id])
 }
