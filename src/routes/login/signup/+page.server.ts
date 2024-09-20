@@ -23,7 +23,7 @@ async function checkForActiveSession(cookies: Cookies): Promise<boolean> {
 function validateSignUpForm(
   username: string | undefined,
   email: string | undefined,
-  password: string | undefined
+  password: string | undefined,
 ): string {
   if (!username) {
     return "No username";
@@ -52,13 +52,13 @@ export const load = async ({ cookies }) => {
 
 async function usernameOrEmailClaimed(
   username: string,
-  email: string
+  email: string,
 ): Promise<string> {
   log(
     "Checking existance of account with username=" +
       username +
       ", email=" +
-      email
+      email,
   );
   return await prisma.user
     .findFirstOrThrow({
