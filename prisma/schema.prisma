@@ -37,7 +37,7 @@ model spheres_users {
   password String
   posts    spheres_posts[]
   spheres  spheres_spheres[]
-  session spheres_session[]
+  session  spheres_session?
 }
 
 model spheres_spheres {
@@ -59,8 +59,8 @@ model spheres_posts {
 }
 
 model spheres_session {
-  id         String   @id @default(uuid())
-  spheres_usersId     Int 
-  created_at DateTime @default(now())
+  id                  String   @id @default(uuid())
+  spheres_usersId     Int      @unique
+  created_at          DateTime @default(now())
   spheres_users       spheres_users @relation(fields: [spheres_usersId], references: [id])
 }
