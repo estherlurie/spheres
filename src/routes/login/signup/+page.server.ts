@@ -2,7 +2,7 @@ import type { Actions, Cookies } from "@sveltejs/kit";
 import { encryptPassword } from "$lib/server/encrypt";
 import { prisma } from "$lib/server/prisma";
 import { redirect } from "@sveltejs/kit";
-import { type Session, validateSession } from "$lib/server/session";
+import { validateSession } from "$lib/server/session";
 
 const INVALID_EMAIL = "email has invalid syntax";
 const LOG_PREFIX = "/login/signup: ";
@@ -11,13 +11,13 @@ function log(message: string) {
   console.log(LOG_PREFIX + message);
 }
 
-function checkForActiveSession(cookies: Cookies): boolean {
+async function checkForActiveSession(cookies: Cookies): Promise<boolean> {
   let sessionId = cookies.get("sessionId");
   if (!sessionId) {
     return false;
   }
   log("Got sessionId");
-  return validateSession(sessionId);
+  return await validateSession(sessionId);
 }
 
 function validateSignUpForm(
@@ -43,9 +43,9 @@ function validateSignUpForm(
 /** @type {import('./$types').PageServerLoad} */
 export const load = async ({ cookies }) => {
   log("Loading");
-  let validSessionExists = checkForActiveSession(cookies);
+  let validSessionExists = await checkForActiveSession(cookies);
   if (validSessionExists) {
-    log("valid session");
+    log("Found valid session");
     redirect(302, "/");
   }
 };

@@ -6,18 +6,23 @@ function log(message: string) {
 
 async function validateSession(sessionId: string): Promise<boolean> {
   log("validateSession called");
-  let session = await prisma.spheres_session.findUnique({
-    where: {
-      id: sessionId,
-    },
-  });
-  if (session) {
-    let user = await prisma.spheres_users.findUnique({
-      where: { id: session.spheres_usersId },
+  return await prisma.spheres_session
+    .findUniqueOrThrow({
+      where: {
+        id: sessionId,
+      },
+    })
+    .then(async (session) => {
+      return await prisma.spheres_users.findUniqueOrThrow({
+        where: { id: session.spheres_usersId },
+      });
+    })
+    .then(() => {
+      return true;
+    })
+    .catch(() => {
+      return false;
     });
-    return true;
-  }
-  return false;
 }
 
 export { validateSession };
