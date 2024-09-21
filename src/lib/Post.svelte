@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "./components/Button.svelte";
 
+  export let owned: boolean;
   export let title: string;
   export let content: string;
   export let id: number;
@@ -15,9 +16,11 @@
     <form action="?/deletePost&id={id}" method="POST">
       <Button type="submit" text="Delete" />
     </form>
-    <div class="edit">
-      <a href="/{id}" role="button">Edit</a>
-    </div>
+    {#if owned}
+      <div class="edit">
+        <a href="/{id}" role="button">Edit</a>
+      </div>
+    {/if}
   </article>
 </div>
 

@@ -28,20 +28,20 @@
   for (const sphere of userSpheres) {
     for (const post of sphere.posts) {
       if (post) {
-        timeOrderedPosts.push(post);
+        timeOrderedPosts.push({ post: post, owned: true });
       }
     }
   }
   for (const sphere of allowedSpheres) {
     for (const post of sphere.posts) {
       if (post) {
-        timeOrderedPosts.push(post);
+        timeOrderedPosts.push({ post: post, owned: false });
       }
     }
   }
-  timeOrderedPosts.sort((a: DbPost, b: DbPost): number => {
-    if (a && b && a.createTime && b.createTime) {
-      return a.createTime.getTime() - b.createTime.getTime();
+  timeOrderedPosts.sort((a, b): number => {
+    if (a.post && b.post && a.post.createTime && b.post.createTime) {
+      return a.post.createTime.getTime() - b.post.createTime.getTime();
     } else if (a) {
       return -1;
     } else if (b) {
@@ -77,12 +77,13 @@
       </div>
     </div>
     <div class="posts">
-      {#each timeOrderedPosts as post}
+      {#each timeOrderedPosts as p}
         <Post
-          title={post.title}
-          content={post.content}
-          id={post.id}
-          sphereName={sphereIdToName.get(post.sphereId)}
+          owned={p.owned}
+          title={p.post.title}
+          content={p.post.content}
+          id={p.post.id}
+          sphereName={sphereIdToName.get(p.post.sphereId)}
         />
       {/each}
     </div>
