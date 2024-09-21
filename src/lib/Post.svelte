@@ -1,28 +1,33 @@
-<script>
-  import Card from "./components/Card.svelte";
+<script lang="ts">
   import Button from "./components/Button.svelte";
 
-  export let title;
-  export let content;
-  export let id;
+  export let title: string;
+  export let content: string;
+  export let id: number;
+  export let sphereName: string;
 </script>
 
 <div class="outer">
   <article>
-    <Card {title} {content} />
+    <p>{sphereName}</p>
+    <h3>{title}</h3>
+    <p>{content}</p>
     <form action="?/deletePost&id={id}" method="POST">
-      <Button type="submit" text="Delete Post" />
+      <Button type="submit" text="Delete" />
     </form>
     <div class="edit">
-      <a href="/{id}" role="button">Edit Post</a>
+      <a href="/{id}" role="button">Edit</a>
     </div>
   </article>
 </div>
 
 <style>
   .outer {
-    margin-left: 10px;
+    width: 100%;
     display: flex;
+    border-color: black;
+    border-style: solid;
+    border-bottom: 0;
   }
 
   article {
