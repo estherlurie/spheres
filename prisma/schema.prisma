@@ -33,15 +33,15 @@ model Post {
   createTime DateTime? @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamp(6)
   title      String
   content    String
-  userId   Int
-  user     User   @relation("owner", fields: [userId], references: [id])
-  sphereId Int
-  spheres  Sphere @relation(fields: [sphereId], references: [id])
+  userId     Int
+  user       User      @relation("owner", fields: [userId], references: [id])
+  sphereId   Int
+  spheres    Sphere    @relation(fields: [sphereId], references: [id])
 }
 
 model Session {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now())
-  userId Int      @unique
-  user User     @relation(fields: [userId], references: [id])
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
 }
