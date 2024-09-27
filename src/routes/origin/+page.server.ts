@@ -15,11 +15,24 @@ export const load = async ({ locals }) => {
     username: locals.username,
     userSpheres: await prisma.sphere.findMany({
       where: { userId: user.id },
-      include: { posts: true },
+      include: {
+        posts: {
+          orderBy: [{ createTime: "desc" }],
+        },
+      },
     }),
     allowedSpheres: await prisma.user.findUnique({
       where: { id: user.id },
-      include: { allowedSpheres: { include: { posts: true } } },
+      include: {
+        allowedSpheres: {
+          include: {
+            posts: {
+              include: { user: true },
+              orderBy: [{ createTime: "desc" }],
+            },
+          },
+        },
+      },
     }),
     posts: await prisma.post.findMany({ where: { userId: user.id } }),
   };

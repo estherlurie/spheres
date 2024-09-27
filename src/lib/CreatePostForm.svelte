@@ -5,32 +5,33 @@
   export let spheres: Sphere[];
 </script>
 
-<form action="?/createPost" method="POST">
-  <h2>What do you want to say?</h2>
-  <label for="sphere">Sphere</label>
-  <select id="sphere" name="sphere">
-    {#each spheres as sphere}
-      <option value={sphere.id}>{sphere.name}</option>
-    {/each}
-  </select>
-  <label for="title"><h3>Title</h3></label>
-  <input class="formEntry" type="text" id="title" name="title" />
-  <label for="content"><h3>Content</h3></label>
-  <textarea class="formEntry" id="content" name="content" rows={5} />
-  <div class="buttonContainer">
-    <Button type="submit" text="Add Post" />
-  </div>
-</form>
+<div class="outer">
+  <h2>New Post</h2>
+  <form action="?/createPost" method="POST">
+    <label for="sphere">Sphere</label>
+    <select id="sphere" name="sphere">
+      {#each spheres as sphere}
+        <option value={sphere.id}>{sphere.name}</option>
+      {/each}
+    </select>
+    <label for="title"><h3>Title</h3></label>
+    <input class="formEntry" type="text" id="title" name="title" />
+    <label for="content"><h3>Content</h3></label>
+    <textarea class="formEntry" id="content" name="content" rows={5} />
+    <div class="buttonContainer">
+      <Button type="submit" text="Add Post" />
+    </div>
+  </form>
+</div>
 
 <style>
-  form {
-    display: block;
-
+  .outer {
+    width: 25%;
     border: solid gray;
     border-radius: 10px;
-
-    width: fit-content;
+    display: block;
     padding: 10px;
+    margin: 0 auto;
   }
 
   .formEntry {
