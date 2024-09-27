@@ -1,10 +1,12 @@
 <script lang="ts">
   import Navbar from "$lib/Navbar.svelte";
+  import SphereDisplay from "$lib/SphereDisplay.svelte";
   import CreatePostForm from "$lib/CreatePostForm.svelte";
-
-  import type { PageData } from "./$types";
   import Post from "$lib/Post.svelte";
   import CreateSphereForm from "$lib/CreateSphereForm.svelte";
+
+  import type { PageData } from "./$types";
+
   export let data: PageData;
 
   let username = data.username;
@@ -68,24 +70,15 @@
   <h1>Origin</h1>
   <div>
     <div class="upper">
-      <div class="flex">
-        {#if !userSpheresExists}
-          <h2>Make your first Sphere!</h2>
-        {:else}
-          <div class="yourSpheres">
-            <h3>Your Spheres</h3>
-            {#each userSpheres as sphere}
-              <p>{sphere.name}</p>
-            {/each}
-          </div>
-        {/if}
-        <CreateSphereForm />
-      </div>
-      <div>
-        {#if userSpheresExists}
-          <CreatePostForm spheres={userSpheres} />
-        {/if}
-      </div>
+      {#if !userSpheresExists}
+        <h2>Make your first Sphere!</h2>
+      {:else}
+        <SphereDisplay spheres={userSpheres} />
+      {/if}
+      {#if userSpheresExists}
+        <CreatePostForm spheres={userSpheres} />
+      {/if}
+      <CreateSphereForm />
     </div>
     <div class="posts">
       {#each timeOrderedPosts as p}
@@ -113,20 +106,14 @@
   }
 
   div {
-    margin: auto;
+    margin: 0 auto;
   }
 
-  .yourSpheres {
-    display: inline-block;
-    padding: 0 5%;
-  }
   .upper {
     display: flex;
     padding-bottom: 1%;
   }
-  .flex {
-    display: flex;
-  }
+
   .posts {
     display: block;
     margin: 0 auto;
