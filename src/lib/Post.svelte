@@ -32,6 +32,8 @@
     border-color: black;
     border-style: solid;
     border-bottom: 0;
+    width: 60%;
+    margin: 0 auto;
   }
 
   article {
