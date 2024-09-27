@@ -100,6 +100,10 @@
     display: block;
   }
 
+  h1 {
+    text-align: center;
+  }
+
   h2 {
     margin: auto;
     padding: 0 5%;
