@@ -3,7 +3,6 @@
   import CreatePostForm from "$lib/CreatePostForm.svelte";
 
   import type { PageData } from "./$types";
-  import type { Post as DbPost, Sphere } from "@prisma/client";
   import Post from "$lib/Post.svelte";
   import CreateSphereForm from "$lib/CreateSphereForm.svelte";
   export let data: PageData;
@@ -28,14 +27,18 @@
   for (const sphere of userSpheres) {
     for (const post of sphere.posts) {
       if (post) {
-        timeOrderedPosts.push({ post: post, owned: true });
+        timeOrderedPosts.push({ post: post, owned: true, author: username });
       }
     }
   }
   for (const sphere of allowedSpheres) {
     for (const post of sphere.posts) {
       if (post) {
-        timeOrderedPosts.push({ post: post, owned: false });
+        timeOrderedPosts.push({
+          post: post,
+          owned: false,
+          author: post.user.name,
+        });
       }
     }
   }
@@ -50,6 +53,14 @@
       return 0;
     }
   });
+
+  const getSphereName = (id: number): string => {
+    const name = sphereIdToName.get(id);
+    if (name) {
+      return name;
+    }
+    return "";
+  };
 </script>
 
 <Navbar {username} />
@@ -80,10 +91,11 @@
       {#each timeOrderedPosts as p}
         <Post
           owned={p.owned}
+          author={p.author}
           title={p.post.title}
           content={p.post.content}
           id={p.post.id}
-          sphereName={sphereIdToName.get(p.post.sphereId)}
+          sphereName={getSphereName(p.post.sphereId)}
         />
       {/each}
     </div>
@@ -118,7 +130,6 @@
   .posts {
     display: block;
     margin: 0 auto;
-    width: 100%;
 
     overflow-x: auto;
     overflow-y: auto;
