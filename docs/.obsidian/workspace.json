@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Sign Up.md",
+                "file": "Better UI.md",
                 "mode": "source",
                 "source": false
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Sign Up.md",
+                "file": "Better UI.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Sign Up.md",
+                "file": "Better UI.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Sign Up.md"
+                "file": "Better UI.md"
               }
             }
           }
@@ -161,10 +161,11 @@
   },
   "active": "5e9686f85f4871b4",
   "lastOpenFiles": [
+    "Tracking.md",
+    "Better UI.md",
+    "Sign Up.md",
     "Session Management.md",
     "Sign In.md",
-    "Home.md",
-    "Tracking.md",
-    "Sign Up.md"
+    "Home.md"
   ]
 }

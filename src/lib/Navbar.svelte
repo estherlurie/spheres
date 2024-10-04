@@ -2,7 +2,7 @@
   export let username: string | null = null;
 </script>
 
-<main>
+<nav>
   <a href="/">Home</a>
   {#if username}
     <a href="/origin">Origin</a>
@@ -11,10 +11,10 @@
   {:else}
     <a href="/login">Login</a>
   {/if}
-</main>
+</nav>
 
 <style lang="scss">
-  main {
+  nav {
     background-color: rgb(68, 94, 86);
     border: solid;
     border-color: black;
